@@ -8,12 +8,12 @@ import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { logout } from '@/routes';
 import { edit } from '@/routes/profile';
-import { type User } from '@/types';
+import { type Admin, type User } from '@/types';
 import { Link, router } from '@inertiajs/react';
 import { LogOut, Settings } from 'lucide-react';
 
 interface UserMenuContentProps {
-    user: User;
+    user: User | Admin | null;
 }
 
 export function UserMenuContent({ user }: UserMenuContentProps) {
@@ -23,6 +23,10 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
         cleanup();
         router.flushAll();
     };
+
+    if (!user) {
+        return null; // Or a placeholder, depending on desired behavior
+    }
 
     return (
         <>

@@ -2,7 +2,9 @@ import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 
 export interface Auth {
-    user: User;
+    user: User | null;
+    admin: Admin | null;
+    guard: 'web' | 'admin';
 }
 
 export interface BreadcrumbItem {
@@ -41,3 +43,19 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Admin {
+    id: number;
+    name: string;
+    email: string;
+    avatar?: string;
+    email_verified_at: string | null;
+    two_factor_enabled?: boolean;
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown; // This allows for additional properties...
+}
+
+export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
+    auth: Auth;
+};
