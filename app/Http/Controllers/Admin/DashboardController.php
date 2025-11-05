@@ -13,6 +13,8 @@ class DashboardController extends Controller
      */
     public function index(): \Inertia\Response
     {
-        return Inertia::render('admin/dashboard');
+        return Inertia::render('admin/dashboard', [
+            'welcomeMessage' => '¡Bienvenido al panel de administración!',
+        ]);
     }
 }

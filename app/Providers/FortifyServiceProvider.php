@@ -2,11 +2,18 @@
 
 namespace App\Providers;
 
+use Illuminate\Contracts\Auth\StatefulGuard;
+use Laravel\Fortify\Actions\AttemptToAuthenticate;
+use Laravel\Fortify\Actions\RedirectsIfTwoFactorAuthenticatable;
+use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
+
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -20,7 +27,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+       //
     }
 
     /**
@@ -28,6 +35,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();
@@ -47,11 +55,19 @@ class FortifyServiceProvider extends ServiceProvider
      */
     private function configureViews(): void
     {
-        Fortify::loginView(fn (Request $request) => Inertia::render('auth/login', [
-            'canResetPassword' => Features::enabled(Features::resetPasswords()),
-            'canRegister' => Features::enabled(Features::registration()),
-            'status' => $request->session()->get('status'),
-        ]));
+
+        Fortify::loginView(fn (Request $request) => Inertia::render(
+            // Comprueba si el nombre de la ruta actual comienza con 'admin.login'
+            $request->routeIs('admin.*')
+                ? 'admin/auth/login'
+                : 'auth/login',
+            [
+                'canResetPassword' => Features::enabled(Features::resetPasswords()),
+                'canRegister' => Features::enabled(Features::registration()),
+                'status' => $request->session()->get('status'),
+            ]
+        ));
+
 
         Fortify::resetPasswordView(fn (Request $request) => Inertia::render('auth/reset-password', [
             'email' => $request->email,

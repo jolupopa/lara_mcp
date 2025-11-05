@@ -12,6 +12,14 @@ class Admin extends Authenticatable
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
+     * Especificamos el guard que debe usar este modelo si se llama
+     * a $this->guard()
+     *
+     * @var string
+     */
+    protected $guard = 'admin';
+
+    /**
      * The table associated with the model.
      *
      * @var string

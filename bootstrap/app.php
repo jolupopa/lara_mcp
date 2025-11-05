@@ -7,6 +7,11 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 
+
+use App\Http\Middleware\Authenticate;
+use App\Http\Middleware\RedirectIfAuthenticated;
+
+
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: [
@@ -23,6 +28,10 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleAppearance::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
+        ]);
+         $middleware->alias([
+            //'guest' => RedirectIfAuthenticated::class, // multi guard
+            //'auth' => Authenticate::class, // multi guards
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

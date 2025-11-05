@@ -1,5 +1,9 @@
 <?php
-
+use App\Models\Admin; // Asegúrate de importar tu modelo Admin
+use App\Models\User;
+use Illuminate\Auth\Passwords\PasswordResetServiceProvider;
+use Illuminate\Auth\AuthServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 return [
 
     /*
