@@ -4,8 +4,8 @@
 
 Este documento define los objetivos fundamentales y el alcance del proyecto de listado inmobiliario. Sirve como la fuente principal de verdad para todos los esfuerzos de desarrollo.
 
-- **Nombre del Proyecto:** Listado de Propiedades Inmobiliarias (Lara-MCP)
-- **Objetivo:** Construir una aplicación web robusta para el listado y búsqueda de propiedades inmobiliarias, utilizando el framework Laravel con un stack frontend moderno.
+- **Nombre del Proyecto:** Virtual Inmobiliaria (Lara-MCP)
+- **Objetivo:** Construir un sistema saas mediante una aplicación web robusta para el listado y búsqueda de propiedades inmobiliarias, utilizando el framework Laravel con un stack frontend moderno.
 - **Características Clave:**
     - Autenticación y autorización de usuarios (agentes, compradores).
     - Búsqueda y filtrado avanzado de propiedades (ubicación, precio, tipo, etc.).

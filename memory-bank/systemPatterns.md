@@ -15,19 +15,18 @@ La aplicación implementa un sistema de autenticación "multi-guard" para separa
     *   **Modelo:** `App\Models\User`
     *   **Responsabilidad:** Gestiona a los usuarios del frontend (clientes). Estos usuarios tendrán roles como `Owner`, `Agent`, o `Bussines`.
     *   **Autenticación:** Manejada por Laravel Fortify.
+    *   **Implementación:** Utiliza las configuraciones por defecto de Fortify para el guard `web`.
 
 2.  **Guard `admin`:**
     *   **Modelo:** `App\Models\Admin`
     *   **Responsabilidad:** Gestiona a los administradores del sistema que acceden a un panel de control separado.
     *   **Autenticación:** Manejada a través de controladores y rutas personalizadas bajo el prefijo `/admin`.
-
-## Gestión de Roles y Permisos
-
--   **Paquete Utilizado:** `spatie/laravel-permission`
--   **Implementación:** Ambos modelos, `User` y `Admin`, utilizan el trait `HasRoles`. Esto permite una gestión granular de permisos y roles para cada guard de forma independiente.
--   **Estructura:**
-    -   Se definirán roles claros (ej. `Super-Admin`, `Agent`).
-    -   Se asignarán permisos específicos a cada rol (ej. `manage-users`, `publish-properties`).
+    *   **Implementación Detallada:**
+        *   **`FortifyServiceProvider.php`**: Se ha modificado el método `loginView` para renderizar `admin/auth/login` si la ruta actual es `admin.*`, permitiendo una vista de login específica para administradores.
+        *   **`AdminAuthenticatedSessionController.php`**: Un controlador personalizado que extiende `Controller` y maneja la lógica de autenticación para el guard `admin`. Sobrescribe el guard de Fortify (`config(['fortify.guard' => 'admin', 'fortify.passwords' => 'admins'])`) durante el proceso de login para asegurar que Fortify autentique contra el modelo `Admin`.
+        *   **`routes/admin.php`**: Contiene las rutas específicas para el login (`admin.login`, `admin.login.store`), logout (`admin.logout`) y el dashboard (`admin.dashboard`) de administradores, agrupadas bajo el prefijo `/admin` y protegidas por el middleware `guest:admin` o `auth:admin`.
+        *   **`AdminLoginResponse.php`**: Una respuesta de login personalizada que redirige a `admin.dashboard` después de una autenticación exitosa para administradores.
+        *   **`AdminLogoutResponse.php`**: Una respuesta de logout personalizada que redirige a `admin.login` después de que un administrador cierra sesión.
 
 ## Decisiones Técnicas Clave
 

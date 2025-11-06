@@ -2,33 +2,35 @@
 
 ## Enfoque de Trabajo Actual
 
--   Implementar la arquitectura de autenticación multi-guard (`web` y `admin`).
--   Integrar el paquete `spatie/laravel-permission` para la gestión de roles y permisos.
+-   La implementación de la arquitectura de autenticación multi-guard (`web` y `admin`) ha sido completada y verificada.
+-   El siguiente paso es integrar el paquete `spatie/laravel-permission` para la gestión de roles y permisos.
 
 ## Cambios Recientes
 
--   Se ha definido y documentado una nueva arquitectura de autenticación multi-guard.
--   Se ha decidido utilizar `spatie/laravel-permission` para manejar roles y permisos.
--   Los archivos `systemPatterns.md` y `techContext.md` han sido actualizados para reflejar estos cambios.
+-   Se ha configurado correctamente el sistema multi-guard de autenticación para `User` y `Admin`.
+-   **`app/Providers/FortifyServiceProvider.php`**: Modificado para manejar las vistas de login de `admin` y `web` de forma condicional.
+-   **`app/Http/Controllers/Admin/AdminAuthenticatedSessionController.php`**: Creado para manejar la autenticación de administradores, sobrescribiendo el guard y los passwords de Fortify para el contexto `admin`.
+-   **`routes/admin.php`**: Definidas las rutas de login, logout y dashboard para el guard `admin`.
+-   **`app/Http/Responses/AdminLoginResponse.php`**: Creado para redirigir a los administradores al dashboard de `admin` después del login.
+-   **`app/Http/Responses/AdminLogoutResponse.php`**: Creado para redirigir a la página de login de `admin` después del logout.
 
 ## Próximos Pasos
 
-1.  **Instalar Paquete:** Ejecutar `composer require spatie/laravel-permission` para añadir la dependencia al proyecto.
-2.  **Publicar Migración:** Ejecutar `php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"` para publicar el archivo de configuración y la migración del paquete.
-3.  **Crear Modelo y Migración `Admin`:** Generar el modelo `Admin` y su correspondiente archivo de migración.
-4.  **Configurar `auth.php`:** Añadir el nuevo guard `admin` y el provider `admins`.
-5.  **Ejecutar Migraciones:** Correr `php artisan migrate` para crear las tablas `admins`, `roles`, `permissions`, etc.
-6.  **Integrar `HasRoles`:** Añadir el trait `HasRoles` a los modelos `User` y `Admin`.
-7.  **Crear Seeder de Roles:** Desarrollar un seeder para crear los roles y permisos iniciales.
+1.  **Instalar `spatie/laravel-permission`:** Añadir el paquete al proyecto.
+2.  **Configurar `laravel-permission`:** Publicar migraciones y configuración.
+3.  **Ejecutar Migraciones:** Correr `php artisan migrate` para crear las tablas de roles y permisos.
+4.  **Crear Seeder de Roles y Permisos:** Desarrollar un seeder para roles y permisos iniciales.
+5.  **Integrar Roles en Modelos:** Añadir el trait `HasRoles` a los modelos `User` y `Admin`.
 
 ## Decisiones y Consideraciones Activas
 
--   La configuración de `config/permission.php` será crucial para mapear correctamente los modelos a los guards.
--   Se debe planificar cuidadosamente la estructura de permisos para que sea escalable.
+-   La separación de la lógica de autenticación para `admin` en un controlador dedicado (`AdminAuthenticatedSessionController`) y respuestas personalizadas (`AdminLoginResponse`, `AdminLogoutResponse`) asegura una clara distinción y evita conflictos con la autenticación de usuarios `web`.
+-   La configuración dinámica del guard de Fortify en `AdminAuthenticatedSessionController@store` es crucial para que Fortify use el guard `admin` durante el proceso de autenticación de administradores.
 
 ## Aprendizajes y Perspectivas del Proyecto
 
--   Definir la arquitectura de autenticación y roles antes de codificar las funcionalidades principales es una inversión que previene refactorizaciones complejas a futuro.
+-   La implementación de un sistema multi-guard con Fortify requiere una cuidadosa configuración de los guards, providers y la personalización de las respuestas de login/logout para cada tipo de usuario.
+-   La capacidad de Fortify para ser extendido y personalizado a través de contratos y acciones permite una gran flexibilidad en escenarios de autenticación complejos.
 
 ## Manejo de Rutas en Laravel + Inertia + React (Sin Ziggy)
 
