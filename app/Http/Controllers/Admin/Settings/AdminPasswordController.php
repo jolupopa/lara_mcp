@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Settings;
+namespace App\Http\Controllers\Admin\Settings;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -9,29 +9,29 @@ use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class PasswordController extends Controller
+class AdminPasswordController extends Controller
 {
     /**
-     * Show the user's password settings page.
+     * Show the admin's password settings page.
      */
     public function edit(): Response
     {
         return Inertia::render('settings/password', [
-            'guard' => 'web',
+            'guard' => 'admin',
         ]);
     }
 
     /**
-     * Update the user's password.
+     * Update the admin's password.
      */
     public function update(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'current_password' => ['required', 'current_password:web'],
+            'current_password' => ['required', 'current_password:admin'],
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        $request->user()->update([
+        $request->user('admin')->update([
             'password' => $validated['password'],
         ]);
 

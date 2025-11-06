@@ -43,8 +43,7 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
-                'user' => $request->user('web'),
-                'admin' => $request->user('admin'),
+                'user' => $request->user('admin') ?? $request->user('web'),
                 'guard' => $request->routeIs('admin*') ? 'admin' : 'web',
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',

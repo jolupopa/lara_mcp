@@ -1,4 +1,5 @@
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
+import AdminProfileController from '@/actions/App/Http/Controllers/Admin/Settings/AdminProfileController';
 import { send } from '@/routes/verification';
 import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
@@ -12,23 +13,29 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
-import { edit } from '@/routes/profile';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Profile settings',
-        href: edit().url,
-    },
-];
+import { edit as userProfileEditRoute } from '@/routes/profile';
+import { edit as adminProfileEditRoute } from '@/routes/admin/profile';
 
 export default function Profile({
     mustVerifyEmail,
     status,
+    guard,
 }: {
     mustVerifyEmail: boolean;
     status?: string;
+    guard: string;
 }) {
     const { auth } = usePage<SharedData>().props;
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Profile settings',
+            href: guard === 'admin' ? adminProfileEditRoute().url : userProfileEditRoute().url,
+        },
+    ];
+
+    const updateFormAction = guard === 'admin' ? AdminProfileController.update() : ProfileController.update();
+    const deleteFormAction = guard === 'admin' ? AdminProfileController.destroy() : ProfileController.destroy();
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -42,7 +49,8 @@ export default function Profile({
                     />
 
                     <Form
-                        {...ProfileController.update.form()}
+                        action={updateFormAction.url}
+                        method={updateFormAction.method}
                         options={{
                             preserveScroll: true,
                         }}
@@ -56,7 +64,7 @@ export default function Profile({
                                     <Input
                                         id="name"
                                         className="mt-1 block w-full"
-                                        defaultValue={auth.user.name}
+                                        defaultValue={auth.user?.name}
                                         name="name"
                                         required
                                         autoComplete="name"
@@ -76,7 +84,7 @@ export default function Profile({
                                         id="email"
                                         type="email"
                                         className="mt-1 block w-full"
-                                        defaultValue={auth.user.email}
+                                        defaultValue={auth.user?.email}
                                         name="email"
                                         required
                                         autoComplete="username"
@@ -90,7 +98,7 @@ export default function Profile({
                                 </div>
 
                                 {mustVerifyEmail &&
-                                    auth.user.email_verified_at === null && (
+                                    auth.user?.email_verified_at === null && (
                                         <div>
                                             <p className="-mt-4 text-sm text-muted-foreground">
                                                 Your email address is
@@ -141,7 +149,21 @@ export default function Profile({
                     </Form>
                 </div>
 
-                <DeleteUser />
+                <DeleteUser formAction={deleteFormAction} />
+
+                {guard === 'web' && (
+                    <div className="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+                        {/* Two-Factor Authentication section will go here */}
+                        <h2 className="text-lg font-medium text-gray-900">Two Factor Authentication</h2>
+                        <p className="mt-1 text-sm text-gray-600">
+                            Add additional security to your account using two factor authentication.
+                        </p>
+                        {/* Placeholder for actual form */}
+                        <div className="mt-6 space-y-6">
+                            <p>Two-Factor Authentication settings for user will be implemented here.</p>
+                        </div>
+                    </div>
+                )}
             </SettingsLayout>
         </AppLayout>
     );

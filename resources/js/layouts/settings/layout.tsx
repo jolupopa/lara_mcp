@@ -2,38 +2,48 @@ import Heading from '@/components/heading';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { cn, isSameUrl, resolveUrl } from '@/lib/utils';
-import { edit as editAppearance } from '@/routes/appearance';
-import { edit } from '@/routes/profile';
-import { show } from '@/routes/two-factor';
-import { edit as editPassword } from '@/routes/user-password';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { edit as userAppearanceEditRoute } from '@/routes/appearance';
+import { edit as userProfileEditRoute } from '@/routes/profile';
+import { show as userTwoFactorShowRoute } from '@/routes/two-factor';
+import { edit as userPasswordEditRoute } from '@/routes/user-password';
+import { edit as adminProfileEditRoute } from '@/routes/admin/profile';
+import { edit as adminPasswordEditRoute } from '@/routes/admin/password';
+import { edit as adminAppearanceEditRoute } from '@/routes/admin/appearance'; // Assuming this route exists or will be created
+import { type NavItem, type SharedData } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
 import { type PropsWithChildren } from 'react';
 
-const sidebarNavItems: NavItem[] = [
-    {
-        title: 'Profile',
-        href: edit(),
-        icon: null,
-    },
-    {
-        title: 'Password',
-        href: editPassword(),
-        icon: null,
-    },
-    {
-        title: 'Two-Factor Auth',
-        href: show(),
-        icon: null,
-    },
-    {
-        title: 'Appearance',
-        href: editAppearance(),
-        icon: null,
-    },
-];
-
 export default function SettingsLayout({ children }: PropsWithChildren) {
+    const { auth } = usePage<SharedData>().props;
+    const guard = auth.guard;
+
+    const sidebarNavItems: NavItem[] = [
+        {
+            title: 'Profile',
+            href: guard === 'admin' ? adminProfileEditRoute() : userProfileEditRoute(),
+            icon: null,
+        },
+        {
+            title: 'Password',
+            href: guard === 'admin' ? adminPasswordEditRoute() : userPasswordEditRoute(),
+            icon: null,
+        },
+        ...(guard === 'web'
+            ? [
+                  {
+                      title: 'Two-Factor Auth',
+                      href: userTwoFactorShowRoute(),
+                      icon: null,
+                  },
+              ]
+            : []),
+        {
+            title: 'Appearance',
+            href: guard === 'admin' ? adminAppearanceEditRoute() : userAppearanceEditRoute(),
+            icon: null,
+        },
+    ];
+
     // When server-side rendering, we only render the layout on the client...
     if (typeof window === 'undefined') {
         return null;

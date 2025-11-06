@@ -1,4 +1,5 @@
 import PasswordController from '@/actions/App/Http/Controllers/Settings/PasswordController';
+import AdminPasswordController from '@/actions/App/Http/Controllers/Admin/Settings/AdminPasswordController';
 import InputError from '@/components/input-error';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
@@ -11,18 +12,21 @@ import HeadingSmall from '@/components/heading-small';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { edit } from '@/routes/user-password';
+import { edit as userPasswordEditRoute } from '@/routes/user-password';
+import { edit as adminPasswordEditRoute } from '@/routes/admin/password'; // Assuming this route exists or will be created
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Password settings',
-        href: edit().url,
-    },
-];
-
-export default function Password() {
+export default function Password({ guard }: { guard: string }) {
     const passwordInput = useRef<HTMLInputElement>(null);
     const currentPasswordInput = useRef<HTMLInputElement>(null);
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Password settings',
+            href: guard === 'admin' ? adminPasswordEditRoute().url : userPasswordEditRoute().url,
+        },
+    ];
+
+    const updateFormAction = guard === 'admin' ? AdminPasswordController.update() : PasswordController.update();
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -36,7 +40,7 @@ export default function Password() {
                     />
 
                     <Form
-                        {...PasswordController.update.form()}
+                        {...updateFormAction}
                         options={{
                             preserveScroll: true,
                         }}

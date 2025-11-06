@@ -7,9 +7,10 @@ import {
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { logout } from '@/routes';
-import { edit } from '@/routes/profile';
-import { type Admin, type User } from '@/types';
-import { Link, router } from '@inertiajs/react';
+import { edit as userProfileEditRoute } from '@/routes/profile';
+import { edit as adminProfileEditRoute } from '@/routes/admin/profile';
+import { type Admin, type SharedData, type User } from '@/types';
+import { Link, router, usePage } from '@inertiajs/react';
 import { LogOut, Settings } from 'lucide-react';
 
 interface UserMenuContentProps {
@@ -17,11 +18,18 @@ interface UserMenuContentProps {
 }
 
 export function UserMenuContent({ user }: UserMenuContentProps) {
+    const { auth } = usePage<SharedData>().props;
+    const guard = auth.guard;
+
     const cleanup = useMobileNavigation();
 
     const handleLogout = () => {
         cleanup();
-        router.flushAll();
+        router.post(logout().url, {}, { // Empty data object as the second argument
+            onSuccess: () => {
+                window.location.reload();
+            },
+        });
     };
 
     if (!user) {
@@ -40,7 +48,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
                 <DropdownMenuItem asChild>
                     <Link
                         className="block w-full"
-                        href={edit()}
+                        href={guard === 'admin' ? adminProfileEditRoute().url : userProfileEditRoute().url}
                         as="button"
                         prefetch
                         onClick={cleanup}
@@ -52,16 +60,15 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-                <Link
-                    className="block w-full"
-                    href={logout()}
-                    as="button"
-                    onClick={handleLogout}
-                    data-test="logout-button"
-                >
-                    <LogOut className="mr-2" />
-                    Log out
-                </Link>
+                    <Link
+                        className="block w-full"
+                        as="button"
+                        onClick={handleLogout}
+                        data-test="logout-button"
+                    >
+                        <LogOut className="mr-2" />
+                        Log out
+                    </Link>
             </DropdownMenuItem>
         </>
     );

@@ -2,8 +2,7 @@ import { InertiaLinkProps } from '@inertiajs/react';
 import { LucideIcon } from 'lucide-react';
 
 export interface Auth {
-    user: User | null;
-    admin: Admin | null;
+    user: User | Admin | null; // This will now hold either the User or Admin object
     guard: 'web' | 'admin';
 }
 

@@ -1,4 +1,3 @@
-import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import HeadingSmall from '@/components/heading-small';
 import InputError from '@/components/input-error';
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,14 @@ import { Label } from '@/components/ui/label';
 import { Form } from '@inertiajs/react';
 import { useRef } from 'react';
 
-export default function DeleteUser() {
+interface DeleteUserProps {
+    formAction: {
+        url: string;
+        method: 'post' | 'put' | 'patch' | 'delete';
+    };
+}
+
+export default function DeleteUser({ formAction }: DeleteUserProps) {
     const passwordInput = useRef<HTMLInputElement>(null);
 
     return (
@@ -54,7 +60,7 @@ export default function DeleteUser() {
                         </DialogDescription>
 
                         <Form
-                            {...ProfileController.destroy.form()}
+                            {...formAction}
                             options={{
                                 preserveScroll: true,
                             }}

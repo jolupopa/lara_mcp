@@ -21,7 +21,7 @@ export function NavUser() {
     const { state } = useSidebar();
     const isMobile = useIsMobile();
 
-    const authenticatedUser = auth.guard === 'admin' ? auth.admin : auth.user;
+    const authenticatedUser = auth.user;
 
     if (!authenticatedUser) {
         return null;
