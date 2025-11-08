@@ -18,7 +18,6 @@ use Laravel\Fortify\Contracts\LoginViewResponse;
 use Laravel\Fortify\Contracts\LogoutResponse;
 
 use Laravel\Fortify\Contracts\LoginResponse;
-use App\Http\Responses\AdminLogoutResponse;
 use Laravel\Fortify\Contracts\RedirectsIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
@@ -107,7 +106,7 @@ class AdminAuthenticatedSessionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * * @return \Laravel\Fortify\Contracts\LogoutResponse
      */
-    public function destroy(Request $request): LogoutResponseContract
+    public function destroy(Request $request): LogoutResponse
     {
         $this->guard->logout();
 
@@ -116,6 +115,6 @@ class AdminAuthenticatedSessionController extends Controller
             $request->session()->regenerateToken();
         }
 
-        return app(AdminLogoutResponse::class);
+        return app(LogoutResponse::class);
     }
 }

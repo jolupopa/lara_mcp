@@ -6,7 +6,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { UserInfo } from '@/components/user-info';
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
-import { logout } from '@/routes';
+import { logout as userLogoutRoute } from '@/routes';
+import { logout as adminLogoutRoute } from '@/routes/admin';
+
 import { edit as userProfileEditRoute } from '@/routes/profile';
 import { edit as adminProfileEditRoute } from '@/routes/admin/profile';
 import { type Admin, type SharedData, type User } from '@/types';
@@ -25,11 +27,7 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
 
     const handleLogout = () => {
         cleanup();
-        router.post(logout().url, {}, { // Empty data object as the second argument
-            onSuccess: () => {
-                window.location.reload();
-            },
-        });
+       router.flushAll();
     };
 
     if (!user) {
@@ -62,6 +60,8 @@ export function UserMenuContent({ user }: UserMenuContentProps) {
             <DropdownMenuItem asChild>
                     <Link
                         className="block w-full"
+                        href={guard === 'admin' ? adminLogoutRoute().url : userLogoutRoute().url}
+                        method="post"
                         as="button"
                         onClick={handleLogout}
                         data-test="logout-button"
