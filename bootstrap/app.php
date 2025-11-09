@@ -7,9 +7,9 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 
-
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\SetSessionTable;
 
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -25,13 +25,14 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(append: [
+            SetSessionTable::class, // Add this middleware first
             HandleAppearance::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
          $middleware->alias([
-            //'guest' => RedirectIfAuthenticated::class, // multi guard
-            //'auth' => Authenticate::class, // multi guards
+            'guest' => RedirectIfAuthenticated::class, // multi guard
+            'auth' => Authenticate::class, // multi guards
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

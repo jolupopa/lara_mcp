@@ -64,6 +64,10 @@ class AdminAuthenticatedSessionController extends Controller
     public function store(LoginRequest $request)
     {
         config(['fortify.guard' => 'admin', 'fortify.passwords' => 'admins']);
+        config(['session.table' => 'admin_sessions']); // Dynamically set session table for admin
+
+        config(['session.cookie' => 'laravel_admin_session']);
+
 
         return $this->loginPipeline($request)->then(function ($request) {
             return app(AdminLoginResponse::class);
@@ -108,6 +112,8 @@ class AdminAuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): LogoutResponse
     {
+        config(['session.table' => 'admin_sessions']); // Dynamically set session table for admin
+
         $this->guard->logout();
 
         if ($request->hasSession()) {

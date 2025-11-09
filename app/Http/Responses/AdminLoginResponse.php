@@ -17,6 +17,6 @@ class AdminLoginResponse implements LoginResponseContract
     {
         return $request->wantsJson()
             ? response()->json(['two_factor' => false])
-            : redirect()->intended(Fortify::redirects('admin/login'));
+            : redirect()->intended(route('admin.dashboard'));
     }
 }
