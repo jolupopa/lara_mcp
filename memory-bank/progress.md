@@ -7,6 +7,7 @@
 -   El proceso de compilación de assets del frontend está configurado con Vite.
 -   El "Memory Bank" está completamente actualizado con la nueva arquitectura de autenticación multi-guard y el plan de implementación de roles y permisos.
 -   **Implementación de Multi-Guard:** La autenticación multi-guard para `web` y `admin` ha sido implementada y configurada correctamente, incluyendo `FortifyServiceProvider`, `AdminAuthenticatedSessionController`, rutas específicas para `admin`, `AdminLoginResponse` y `AdminLogoutResponse`.
+-   **Modelos de Perfil:** Los modelos `UserProfile` y `AdminProfile` han sido creados con sus respectivas migraciones y relaciones uno a uno con los modelos `User` y `Admin`.
 
 ## Lo que Falta por Construir
 
@@ -17,7 +18,7 @@
 
 ## Estado Actual
 
--   El proyecto se encuentra en la fase de **planificación arquitectónica detallada y ejecución inicial**. La hoja de ruta para la implementación de la autenticación y los permisos está definida y documentada, y la parte de autenticación multi-guard ha sido completada. El siguiente paso es la integración del paquete `spatie/laravel-permission`.
+-   El proyecto se encuentra en la fase de **ejecución inicial**. La hoja de ruta para la implementación de la autenticación y los permisos está definida y documentada. La autenticación multi-guard y la creación de los modelos de perfil con sus relaciones han sido completadas. El siguiente paso es la integración del paquete `spatie/laravel-permission`.
 
 ## Problemas Conocidos
 

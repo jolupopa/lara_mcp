@@ -2,6 +2,7 @@
 
 ## Enfoque de Trabajo Actual
 
+-   Se han creado los modelos `UserProfile` y `AdminProfile` con sus respectivas migraciones y relaciones.
 -   La implementación de la arquitectura de autenticación multi-guard (`web` y `admin`) ha sido completada y verificada.
 -   El siguiente paso es integrar el paquete `spatie/laravel-permission` para la gestión de roles y permisos.
 
@@ -13,6 +14,12 @@
 -   **`routes/admin.php`**: Definidas las rutas de login, logout y dashboard para el guard `admin`.
 -   **`app/Http/Responses/AdminLoginResponse.php`**: Creado para redirigir a los administradores al dashboard de `admin` después del login.
 -   **`app/Http/Responses/AdminLogoutResponse.php`**: Creado para redirigir a la página de login de `admin` después del logout.
+-   **`app/Models/UserProfile.php`**: Creado con campos para `full_name`, `lastname`, `address`, `type`, `dni`, `ruc`, `phone`, `image_path`, `regular_publications`, `featured_publications` y una relación `belongsTo` con `User`.
+-   **`database/migrations/*_create_user_profiles_table.php`**: Creada y actualizada con los campos para `UserProfile` y la clave foránea `user_id`.
+-   **`app/Models/AdminProfile.php`**: Creado con campos para `full_name`, `dni`, `phone`, `address`, `image_path` y una relación `belongsTo` con `Admin`.
+-   **`database/migrations/*_create_admin_profiles_table.php`**: Creada y actualizada con los campos para `AdminProfile` y la clave foránea `admin_id`.
+-   **`app/Models/User.php`**: Actualizado para incluir la relación `hasOne` con `UserProfile`.
+-   **`app/Models/Admin.php`**: Actualizado para incluir la relación `hasOne` con `AdminProfile`.
 
 ## Próximos Pasos
 

@@ -35,6 +35,7 @@ class Admin extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
     ];
 
     /**
@@ -61,5 +62,13 @@ class Admin extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Get the admin profile associated with the admin.
+     */
+    public function profile()
+    {
+        return $this->hasOne(AdminProfile::class);
     }
 }

@@ -13,26 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::firstOrCreate(
-            ['email' => 'test@gmail.com'],
-            [
-                'name' => 'Test User',
-                'password' => 'password',
-                'email_verified_at' => now(),
-            ]
-        );
-
-        User::firstOrCreate(
-            ['email' => 'user@gmail.com'],
-            [
-                'name' => 'User',
-                'password' => 'password',
-                'email_verified_at' => now(),
-            ]
-        );
-
+        $this->call(UserSeeder::class);
         $this->call(AdminSeeder::class);
     }
 }

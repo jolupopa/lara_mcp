@@ -42,3 +42,8 @@ La aplicación implementa un sistema de autenticación "multi-guard" para separa
 -   **`pages/**/*.tsx`:** Componentes de página individuales.
 -   **`resources/js/components`:** Directorio principal para componentes reutilizables.
     *   **Convención de Nomenclatura:** Todas las carpetas y componentes dentro de `resources/js/components` deben seguir el mismo patrón de nombrado (ej. `camelCase` o `kebab-case` consistente) para mantener la uniformidad y evitar problemas de resolución de módulos y errores de casing en TypeScript.
+
+## Relaciones de Modelos
+
+-   **`User` y `UserProfile`:** Se ha establecido una relación uno a uno (`hasOne` en `User`, `belongsTo` en `UserProfile`). Cada `User` tiene un `UserProfile` asociado que contiene información detallada como `full_name`, `lastname`, `address`, `type`, `dni`, `ruc`, `phone`, `image_path`, `regular_publications` y `featured_publications`.
+-   **`Admin` y `AdminProfile`:** Se ha establecido una relación uno a uno (`hasOne` en `Admin`, `belongsTo` en `AdminProfile`). Cada `Admin` tiene un `AdminProfile` asociado que contiene información como `full_name`, `dni`, `phone`, `address` y `image_path`.
