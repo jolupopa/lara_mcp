@@ -25,11 +25,15 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(append: [
-            SetSessionTable::class, // Add this middleware first
             HandleAppearance::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
+
+        $middleware->prepend([
+            SetSessionTable::class, // Prepend this middleware
+        ]); 
+
          $middleware->alias([
             'guest' => RedirectIfAuthenticated::class, // multi guard
             'auth' => Authenticate::class, // multi guards
